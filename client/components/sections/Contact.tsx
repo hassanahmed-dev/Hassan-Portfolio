@@ -80,19 +80,19 @@ export function Contact() {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
           {/* Contact info */}
           <FadeIn direction="left" className="lg:col-span-2">
-            <div className="space-y-8">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-[#8b5cf6]/10 flex items-center justify-center flex-shrink-0">
+            <div className="space-y-6">
+              <div className="group flex items-start gap-4 p-4 rounded-2xl border border-transparent hover:border-white/[0.06] hover:bg-white/[0.02] transition-all duration-300">
+                <div className="w-12 h-12 rounded-xl bg-[#8b5cf6]/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
                   <Mail className="text-[#8b5cf6]" size={20} />
                 </div>
                 <div>
                   <h4 className="text-white font-medium mb-1">Email</h4>
-                  <p className="text-[#94a3b8] text-sm">hello@hassankhan.dev</p>
+                  <p className="text-[#94a3b8] text-sm">technicalhassankhan.1@gmail.com</p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-[#8b5cf6]/10 flex items-center justify-center flex-shrink-0">
+              <div className="group flex items-start gap-4 p-4 rounded-2xl border border-transparent hover:border-white/[0.06] hover:bg-white/[0.02] transition-all duration-300">
+                <div className="w-12 h-12 rounded-xl bg-[#8b5cf6]/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
                   <MapPin className="text-[#8b5cf6]" size={20} />
                 </div>
                 <div>
@@ -101,7 +101,7 @@ export function Contact() {
                 </div>
               </div>
 
-              <div className="pt-6 border-t border-white/[0.06]">
+              <div className="mt-2 px-4 pt-6 border-t border-white/[0.06]">
                 <h4 className="text-white font-medium mb-4">Follow Me</h4>
                 <div className="flex gap-3">
                   {socialLinks.map((link) => (
@@ -123,8 +123,9 @@ export function Contact() {
           <FadeIn direction="right" className="lg:col-span-3">
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="space-y-5 p-6 md:p-8 rounded-2xl bg-white/[0.02] border border-white/[0.06]"
+              className="relative space-y-5 p-6 md:p-8 rounded-2xl bg-white/[0.02] border border-white/[0.06] backdrop-blur-sm"
             >
+              <div className="absolute inset-x-6 -top-px h-px bg-gradient-to-r from-transparent via-[#8b5cf6]/50 to-transparent" />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
                   <input
@@ -172,10 +173,12 @@ export function Contact() {
                 )}
               </div>
 
-              <button
+              <motion.button
                 type="submit"
                 disabled={submitState === "loading"}
-                className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#8b5cf6] to-[#06b6d4] text-white font-semibold text-sm hover:shadow-[0_0_40px_rgba(139,92,246,0.3)] transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+                whileHover={{ scale: submitState === "loading" ? 1 : 1.015 }}
+                whileTap={{ scale: 0.98 }}
+                className="group w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#8b5cf6] to-[#06b6d4] text-white font-semibold text-sm shadow-[0_8px_30px_rgba(139,92,246,0.25)] hover:shadow-[0_0_45px_rgba(139,92,246,0.45)] transition-shadow duration-300 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
               >
                 {submitState === "loading" ? (
                   <>
@@ -184,11 +187,14 @@ export function Contact() {
                   </>
                 ) : (
                   <>
-                    <Send size={18} />
+                    <Send
+                      size={18}
+                      className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5"
+                    />
                     Send Message
                   </>
                 )}
-              </button>
+              </motion.button>
 
               {/* Status messages */}
               <AnimatePresence>

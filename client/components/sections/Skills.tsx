@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { FadeIn } from "@/components/animations/FadeIn";
@@ -8,6 +8,32 @@ import { skills, skillCategories } from "@/lib/data/skills";
 
 function SkillBar({ name, proficiency, delay }: { name: string; proficiency: number; delay: number }) {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.3 });
+  const [pct, setPct] = useState(0);
+
+  useEffect(() => {
+    if (!inView) return;
+    const duration = 1100;
+    const startDelay = delay * 100;
+    let raf = 0;
+    let startTime = 0;
+
+    const tick = (now: number) => {
+      if (!startTime) startTime = now;
+      const t = Math.min((now - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setPct(Math.round(eased * proficiency));
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+
+    const id = setTimeout(() => {
+      raf = requestAnimationFrame(tick);
+    }, startDelay);
+
+    return () => {
+      clearTimeout(id);
+      cancelAnimationFrame(raf);
+    };
+  }, [inView, proficiency, delay]);
 
   return (
     <div ref={ref} className="group">
@@ -15,15 +41,18 @@ function SkillBar({ name, proficiency, delay }: { name: string; proficiency: num
         <span className="text-sm font-medium text-[#f8fafc] group-hover:text-[#8b5cf6] transition-colors">
           {name}
         </span>
-        <span className="text-xs text-[#94a3b8]">{proficiency}%</span>
+        <span className="text-xs text-[#94a3b8] tabular-nums">{pct}%</span>
       </div>
-      <div className="h-2 rounded-full bg-white/[0.06] overflow-hidden">
+      <div className="relative h-2 rounded-full bg-white/[0.06] overflow-hidden">
         <motion.div
-          className="h-full rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#06b6d4]"
+          className="relative h-full rounded-full bg-gradient-to-r from-[#8b5cf6] to-[#06b6d4] shadow-[0_0_12px_rgba(139,92,246,0.5)]"
           initial={{ width: 0 }}
           animate={inView ? { width: `${proficiency}%` } : { width: 0 }}
-          transition={{ duration: 1, delay: delay * 0.1, ease: [0.25, 0.4, 0.25, 1] }}
-        />
+          transition={{ duration: 1.1, delay: delay * 0.1, ease: [0.16, 1, 0.3, 1] }}
+        >
+          {/* Moving shimmer highlight */}
+          <span className="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-white/40 to-transparent bg-[length:200%_100%] animate-[shimmer_2.5s_linear_infinite]" />
+        </motion.div>
       </div>
     </div>
   );

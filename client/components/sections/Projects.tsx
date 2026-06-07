@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FadeIn } from "@/components/animations/FadeIn";
+import { SpotlightCard } from "@/components/animations/SpotlightCard";
 import { projects } from "@/lib/data/projects";
 import { ExternalLink, Github } from "lucide-react";
 
@@ -75,60 +76,74 @@ export function Projects() {
                 key={project.id}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="group relative rounded-2xl bg-white/[0.02] border border-white/[0.06] overflow-hidden hover:border-[#8b5cf6]/40 transition-all duration-500 hover:shadow-[0_0_40px_rgba(139,92,246,0.1)]"
+                transition={{ duration: 0.5, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
               >
-                {/* Project image placeholder */}
-                <div className="relative h-48 overflow-hidden bg-gradient-to-br from-[#1a1a24] to-[#111118]">
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#8b5cf6]/20 to-[#06b6d4]/20 opacity-50" />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-4xl font-bold font-[family-name:var(--font-space-grotesk)] text-white/10">
-                      {project.title.charAt(0)}
-                    </span>
-                  </div>
-                  {/* Hover overlay */}
-                  <div className="absolute inset-0 bg-[#0a0a0f]/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
-                    <a
-                      href={project.liveUrl}
-                      className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-[#8b5cf6]/30 transition-colors"
-                      aria-label="Live demo"
-                    >
-                      <ExternalLink size={18} />
-                    </a>
-                    <a
-                      href={project.githubUrl}
-                      className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-[#8b5cf6]/30 transition-colors"
-                      aria-label="GitHub"
-                    >
-                      <Github size={18} />
-                    </a>
-                  </div>
-                  {project.featured && (
-                    <div className="absolute top-3 right-3 px-2.5 py-1 rounded-md bg-[#8b5cf6]/20 border border-[#8b5cf6]/40 text-[#8b5cf6] text-xs font-medium">
-                      Featured
-                    </div>
-                  )}
-                </div>
-
-                {/* Content */}
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold text-white mb-2 font-[family-name:var(--font-space-grotesk)]">
-                    {project.title}
-                  </h3>
-                  <p className="text-[#94a3b8] text-sm leading-relaxed mb-4 line-clamp-2">
-                    {project.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-2.5 py-1 rounded-md bg-white/[0.04] border border-white/[0.06] text-[#94a3b8] text-xs"
-                      >
-                        {tag}
+                <SpotlightCard
+                  tilt={4}
+                  spotlightColor="rgba(6, 182, 212, 0.12)"
+                  className="group h-full rounded-2xl bg-white/[0.02] border border-white/[0.06] overflow-hidden hover:border-[#8b5cf6]/40 transition-colors duration-500 hover:shadow-[0_0_40px_rgba(139,92,246,0.14)]"
+                >
+                  {/* Project image placeholder */}
+                  <div className="relative h-48 overflow-hidden bg-gradient-to-br from-[#1a1a24] to-[#111118]">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#8b5cf6]/20 to-[#06b6d4]/20 opacity-50 transition-transform duration-700 group-hover:scale-110" />
+                    <div
+                      className="absolute inset-0 bg-grid opacity-[0.15]"
+                      style={{
+                        maskImage:
+                          "radial-gradient(circle at 50% 50%, black, transparent 75%)",
+                        WebkitMaskImage:
+                          "radial-gradient(circle at 50% 50%, black, transparent 75%)",
+                      }}
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-6xl font-bold font-[family-name:var(--font-space-grotesk)] text-white/[0.08] transition-all duration-500 group-hover:text-white/[0.14] group-hover:scale-110">
+                        {project.title.charAt(0)}
                       </span>
-                    ))}
+                    </div>
+                    {/* Hover overlay */}
+                    <div className="absolute inset-0 bg-[#0a0a0f]/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
+                      <a
+                        href={project.liveUrl}
+                        className="w-11 h-11 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-white hover:bg-[#8b5cf6]/40 hover:scale-110 hover:-translate-y-1 transition-all duration-300"
+                        aria-label="Live demo"
+                      >
+                        <ExternalLink size={18} />
+                      </a>
+                      <a
+                        href={project.githubUrl}
+                        className="w-11 h-11 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-white hover:bg-[#8b5cf6]/40 hover:scale-110 hover:-translate-y-1 transition-all duration-300"
+                        aria-label="GitHub"
+                      >
+                        <Github size={18} />
+                      </a>
+                    </div>
+                    {project.featured && (
+                      <div className="absolute top-3 right-3 px-2.5 py-1 rounded-md bg-[#8b5cf6]/20 border border-[#8b5cf6]/40 text-[#8b5cf6] text-xs font-medium backdrop-blur-sm">
+                        Featured
+                      </div>
+                    )}
                   </div>
-                </div>
+
+                  {/* Content */}
+                  <div className="p-6">
+                    <h3 className="text-lg font-semibold text-white mb-2 font-[family-name:var(--font-space-grotesk)] transition-colors group-hover:text-[#8b5cf6]">
+                      {project.title}
+                    </h3>
+                    <p className="text-[#94a3b8] text-sm leading-relaxed mb-4 line-clamp-2">
+                      {project.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {project.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-2.5 py-1 rounded-md bg-white/[0.04] border border-white/[0.06] text-[#94a3b8] text-xs"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </SpotlightCard>
               </motion.div>
             ))}
           </motion.div>

@@ -11,6 +11,20 @@
   --color-border: rgba(255, 255, 255, 0.06);
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-heading: 'Space Grotesk', system-ui, sans-serif;
+
+  /* Signature easing curves for premium motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Reusable animations */
+  --animate-aurora: aurora 18s ease-in-out infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-slow: float 9s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.5s linear infinite;
+  --animate-spin-slow: spinSlow 14s linear infinite;
+  --animate-gradient: gradientShift 6s ease infinite;
+  --animate-glow-pulse: glowPulse 4s ease-in-out infinite;
 }
 
 @layer base {
@@ -24,6 +38,7 @@
   html {
     scroll-behavior: smooth;
     overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
@@ -32,6 +47,8 @@
     font-family: var(--font-sans);
     overflow-x: hidden;
     width: 100%;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
   main {
@@ -39,12 +56,12 @@
   }
 
   ::selection {
-    background-color: rgba(139, 92, 246, 0.3);
+    background-color: rgba(139, 92, 246, 0.32);
     color: #f8fafc;
   }
 
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 9px;
   }
 
   ::-webkit-scrollbar-track {
@@ -52,15 +69,25 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #2a2a3a;
-    border-radius: 4px;
+    background: linear-gradient(180deg, #8b5cf6, #06b6d4);
+    border-radius: 6px;
+    border: 2px solid #0a0a0f;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #3a3a4a;
+    background: linear-gradient(180deg, #a78bfa, #22d3ee);
+  }
+
+  /* Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #8b5cf6 #0a0a0f;
   }
 }
 
+/* ------------------------------------------------------------------ */
+/* Keyframes                                                           */
+/* ------------------------------------------------------------------ */
 @keyframes marquee {
   from {
     transform: translateX(0);
@@ -70,8 +97,150 @@
   }
 }
 
+@keyframes marqueeReverse {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes aurora {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.5;
+  }
+  33% {
+    transform: translate(8%, -6%) scale(1.12);
+    opacity: 0.7;
+  }
+  66% {
+    transform: translate(-6%, 5%) scale(0.95);
+    opacity: 0.55;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes spinSlow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes glowPulse {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Reusable utility classes                                           */
+/* ------------------------------------------------------------------ */
+@layer utilities {
+  /* Animated gradient text that subtly shifts hue */
+  .gradient-text {
+    background-image: linear-gradient(
+      120deg,
+      #a78bfa 0%,
+      #8b5cf6 30%,
+      #06b6d4 70%,
+      #22d3ee 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradientShift 6s ease infinite;
+  }
+
+  /* Frosted glass surface */
+  .glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  /* Soft text glow */
+  .text-glow {
+    text-shadow: 0 0 28px rgba(139, 92, 246, 0.45);
+  }
+
+  /* Dotted/line grid backdrop */
+  .bg-grid {
+    background-image: linear-gradient(
+        rgba(255, 255, 255, 0.045) 1px,
+        transparent 1px
+      ),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+
+  /* Subtle film grain via SVG noise */
+  .bg-noise {
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc1IiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbHRlcj0idXJsKCNhKSIgb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==");
+  }
+
+  /* 3D perspective helpers for tilt cards */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

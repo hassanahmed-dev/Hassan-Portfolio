@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { FadeIn } from "@/components/animations/FadeIn";
 import { StaggerContainer, staggerItem } from "@/components/animations/StaggerContainer";
+import { SpotlightCard } from "@/components/animations/SpotlightCard";
 import { services } from "@/lib/data/services";
 
 export function Services() {
@@ -32,30 +33,35 @@ export function Services() {
 
         <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service) => (
-            <motion.div
-              key={service.title}
-              variants={staggerItem}
-              className="group relative p-6 md:p-8 rounded-2xl bg-white/[0.02] border border-white/[0.06] backdrop-blur-sm hover:border-[#8b5cf6]/40 hover:bg-white/[0.04] transition-all duration-500 hover:shadow-[0_0_40px_rgba(139,92,246,0.1)]"
-            >
-              <div className="w-12 h-12 rounded-xl bg-[#8b5cf6]/10 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
-                <service.icon className="text-[#8b5cf6]" size={24} />
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-3 font-[family-name:var(--font-space-grotesk)]">
-                {service.title}
-              </h3>
-              <p className="text-[#94a3b8] text-sm leading-relaxed mb-4">
-                {service.description}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {service.technologies.map((tech) => (
-                  <span
-                    key={tech}
-                    className="px-2.5 py-1 rounded-md bg-white/[0.04] border border-white/[0.06] text-[#94a3b8] text-xs"
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
+            <motion.div key={service.title} variants={staggerItem}>
+              <SpotlightCard
+                tilt={5}
+                className="group h-full p-6 md:p-8 rounded-2xl bg-white/[0.02] border border-white/[0.06] backdrop-blur-sm hover:border-[#8b5cf6]/40 hover:bg-white/[0.03] transition-colors duration-500 hover:shadow-[0_0_40px_rgba(139,92,246,0.12)]"
+              >
+                <div className="relative w-12 h-12 rounded-xl bg-[#8b5cf6]/10 flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110 group-hover:bg-[#8b5cf6]/20">
+                  <span className="absolute inset-0 rounded-xl bg-[#8b5cf6]/30 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <service.icon
+                    className="relative text-[#8b5cf6] transition-transform duration-300 group-hover:-rotate-6"
+                    size={24}
+                  />
+                </div>
+                <h3 className="text-lg font-semibold text-white mb-3 font-[family-name:var(--font-space-grotesk)]">
+                  {service.title}
+                </h3>
+                <p className="text-[#94a3b8] text-sm leading-relaxed mb-4">
+                  {service.description}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {service.technologies.map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-2.5 py-1 rounded-md bg-white/[0.04] border border-white/[0.06] text-[#94a3b8] text-xs transition-colors group-hover:border-[#8b5cf6]/20"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </SpotlightCard>
             </motion.div>
           ))}
         </StaggerContainer>
